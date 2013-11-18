@@ -1,0 +1,21 @@
+    - name: change hostname
+      shell: hostname $(hostname)-vpn
+
+    - name: update repositories cache and install openvpn package
+      apt: pkg=openvpn update_cache=yes cache_valid_time=3600
+
+    - name: copy the client configuration file
+      copy: src=/etc/openvpn/client.conf dest=/etc/openvpn/
+
+    - name: copy the CA certificate
+      copy: src=/tmp/ca.crt dest=/etc/openvpn/
+
+    - name: copy the client certificate
+      copy: src=/tmp/client.crt dest=/etc/openvpn/
+
+    - name: copy the client key
+      copy: src=/tmp/client.key dest=/etc/openvpn/
+
+    - name: execute the vpn client
+      command: openvpn --config client.conf --daemon --log openvpn_client.log  chdir=/etc/openvpn/ creates=/etc/openvpn/openvpn_client.log
+
