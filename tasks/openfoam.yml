@@ -1,0 +1,2 @@
+    - name: decompress the application
+      shell: sleep 1
