@@ -1,2 +1,4 @@
+    - name: obtain the application
+      command: wget https://s3.amazonaws.com/amcaar/openfoam.tar.gz
     - name: decompress the application
-      shell: sleep 1
+      command: tar xvf openfoam.tar.gz
