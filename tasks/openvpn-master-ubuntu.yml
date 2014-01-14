@@ -2,16 +2,10 @@
       shell: hostname ${IM_MASTER_FQDN}-vpn
 
     - name: update repositories cache and install openvpn package
-      yum: name=openvpn enablerepo=epel state=latest
-
-    - name: download easy-rsa
-      get_url: url=https://github.com/downloads/OpenVPN/easy-rsa/easy-rsa-2.2.0_master.tar.gz dest=/tmp/easy-rsa.tar.gz
-	  
-    - name: decompress easy-rsa
-      command: tar -zxvf easy-rsa.tar.gz chdir=/tmp/
+      apt: pkg=openvpn update_cache=yes cache_valid_time=3600
 
     - name: copy rsa files to the work directory
-      command: cp -R easy-rsa-2.2.0_master/easy-rsa/ /etc/openvpn/
+      command: cp -R /usr/share/doc/openvpn/examples/easy-rsa/ /etc/openvpn/ creates=/etc/openvpn/easy-rsa
 
     - name: update KEY_COUNTRY value
       lineinfile: dest=/etc/openvpn/easy-rsa/2.0/vars regexp='export KEY_COUNTRY="US"' line='export KEY_COUNTRY="ES"' state=present
@@ -56,7 +50,10 @@
       shell: . ./vars;./build-dh chdir=/etc/openvpn/easy-rsa/2.0/ creates=/etc/openvpn/easy-rsa/2.0/keys/dh1024.pem
 
     - name: copy the sample file of server configuration
-      command: cp -R /usr/share/doc/openvpn-2.3.2/sample/sample-config-files /etc/openvpn/ creates=/etc/openvpn/server.conf
+      command: cp -R /usr/share/doc/openvpn/examples/sample-config-files/ /etc/openvpn/ creates=/etc/openvpn/server.conf
+
+    - name: decompress server.conf file
+      command: gzip -d server.conf.gz chdir=/etc/openvpn/sample-config-files/ creates=/etc/openvpn/server.conf
 
     - name: copy server.conf to the work directory
       local_action: copy src=/etc/openvpn/sample-config-files/server.conf dest=/etc/openvpn/

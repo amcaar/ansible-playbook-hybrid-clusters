@@ -2,7 +2,7 @@
       shell: hostname $(hostname)-vpn
 
     - name: update repositories cache and install openvpn package
-      yum: name=openvpn enablerepo=epel state=latest
+      apt: pkg=openvpn update_cache=yes cache_valid_time=3600
 
     - name: copy the client configuration file
       copy: src=/etc/openvpn/client.conf dest=/etc/openvpn/

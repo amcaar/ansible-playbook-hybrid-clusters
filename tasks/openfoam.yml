@@ -1,8 +1,16 @@
+<<<<<<< HEAD
     - name: obtain the application
+=======
+    - name: download foo.conf
+>>>>>>> ubuntu and scientific linux support
       get_url: url=https://s3.amazonaws.com/amcaar/openfoam.tar.gz dest=/tmp/openfoam.tar.gz
     - name: decompress the application
       command: tar xvf openfoam.tar.gz chdir=/tmp/
     - name: give execution permissions to the launcher script
+<<<<<<< HEAD
       command: chmod u+x launch.sh chdir=/tmp/sim_europar
+=======
+      command: chmod u+x launch.sh chdir=/tmp/sim_europar	
+>>>>>>> ubuntu and scientific linux support
     - name: create user ubuntu and configure SSH access
       user: name=ubuntu password=yoyoyo generate_ssh_key=yes shell=/bin/bash
