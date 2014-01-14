@@ -2,5 +2,7 @@
       command: wget https://s3.amazonaws.com/amcaar/openfoam.tar.gz
     - name: decompress the application
       command: tar xvf openfoam.tar.gz
+    - name: give execution permissions to the launcher script
+      command: chmod u+x /sim_europar/launch.sh
     - name: create user ubuntu and configure SSH access
       user: name=ubuntu password=O3Je2Qxgx0w generate_ssh_key=yes shell=/bin/bash
