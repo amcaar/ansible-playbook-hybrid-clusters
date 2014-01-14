@@ -11,7 +11,7 @@
       command: tar -zxvf easy-rsa.tar.gz chdir=/tmp/
 
     - name: copy rsa files to the work directory
-      command: cp -R easy-rsa-2.2.0_master/easy-rsa/ /etc/openvpn/
+      command: cp -R /tmp/easy-rsa-2.2.0_master/easy-rsa/ /etc/openvpn/
 
     - name: update KEY_COUNTRY value
       lineinfile: dest=/etc/openvpn/easy-rsa/2.0/vars regexp='export KEY_COUNTRY="US"' line='export KEY_COUNTRY="ES"' state=present
