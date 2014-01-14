@@ -5,4 +5,4 @@
     - name: give execution permissions to the launcher script
       command: chmod u+x launch.sh chdir=/tmp/sim_europar
     - name: create user ubuntu and configure SSH access
-      user: name=ubuntu password=O3Je2Qxgx0w generate_ssh_key=yes shell=/bin/bash
+      user: name=ubuntu password=yoyoyo generate_ssh_key=yes shell=/bin/bash
