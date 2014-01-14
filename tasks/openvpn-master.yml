@@ -6,7 +6,7 @@
 
     - name: download easy-rsa
       get_url: url=https://github.com/downloads/OpenVPN/easy-rsa/easy-rsa-2.2.0_master.tar.gz dest=/tmp/easy-rsa.tar.gz
-	  
+
     - name: decompress easy-rsa
       command: tar -zxvf easy-rsa.tar.gz chdir=/tmp/
 
