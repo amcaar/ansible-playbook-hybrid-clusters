@@ -112,20 +112,11 @@
     - name: copy the ca.crt to a temp directory
       command: cp /etc/openvpn/easy-rsa/2.0/keys/ca.crt /tmp/ creates=/tmp/ca.crt
 
-    - name: change the owner of ca.crt
-      command: chown ubuntu ca.crt chdir=/tmp
-
     - name: copy the client.crt to a temp directory
       command: cp /etc/openvpn/easy-rsa/2.0/keys/client.crt /tmp/ creates=/tmp/client.crt
 
-    - name: change the owner of client.crt
-      command: chown ubuntu client.crt chdir=/tmp
-
     - name: copy the client.key to a temp directory
       command: cp /etc/openvpn/easy-rsa/2.0/keys/client.key /tmp/ creates=/tmp/client.key
-
-    - name: change the owner of client.key
-      command: chown ubuntu client.key chdir=/tmp
 
     - name: execute the vpn server
       command: openvpn --config server.conf --daemon chdir=/etc/openvpn/ creates=/etc/openvpn/openvpn-status.log
