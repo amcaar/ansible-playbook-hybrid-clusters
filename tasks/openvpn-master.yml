@@ -97,8 +97,8 @@
     - name: activate user nobody in client.conf
       lineinfile: dest=/etc/openvpn/client.conf regexp=';user nobody' line='user nobody' state=present
 
-    - name: activate group nogroup in client.conf
-      lineinfile: dest=/etc/openvpn/client.conf regexp=';group nogroup' line='group nogroup' state=present
+    - name: activate group nobody in client.conf
+      lineinfile: dest=/etc/openvpn/client.conf regexp=';group nobody' line='group nobody' state=present
 
     - name: indicate where is the ca.crt file in client.conf
       lineinfile: dest=/etc/openvpn/client.conf regexp='ca ca.crt' line='ca /etc/openvpn/ca.crt' state=present
