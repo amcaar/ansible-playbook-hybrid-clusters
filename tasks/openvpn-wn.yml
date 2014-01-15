@@ -3,7 +3,7 @@
       
     - name: enabling epel repository
       get_url: url=http://download.fedoraproject.org/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm dest=/tmp/epel-release-6-8.noarch.rpm
-	  
+
     - name: enabling epel repository
       command: rpm -ivh /tmp/epel-release-6-8.noarch.rpm
       
