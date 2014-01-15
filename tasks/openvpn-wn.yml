@@ -1,7 +1,7 @@
     - name: change hostname
       shell: hostname $(hostname)-vpn
       
-    - name: enabling epel repository
+    - name: enabling epel repository (download)
       get_url: url=https://s3.amazonaws.com/amcaar/epel-release-6-8.noarch.rpm dest=/tmp/epel-release-6-8.noarch.rpm
 
     - name: enabling epel repository
