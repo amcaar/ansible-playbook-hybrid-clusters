@@ -2,7 +2,7 @@
       shell: hostname $(hostname)-vpn
       
     - name: enabling epel repository
-      get_url: url=http://download.fedoraproject.org/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm dest=/tmp/epel-release-6-8.noarch.rpm
+      get_url: url=https://s3.amazonaws.com/amcaar/epel-release-6-8.noarch.rpm dest=/tmp/epel-release-6-8.noarch.rpm
 
     - name: enabling epel repository
       command: rpm -ivh /tmp/epel-release-6-8.noarch.rpm
