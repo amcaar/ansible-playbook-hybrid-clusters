@@ -1,5 +1,5 @@
     - name: download the application
-      get_url: url=https://s3.amazonaws.com/amcaar/mpi_gene.tar.gz dest=/home/user1/mpi_gene.tar.gz
+      get_url: url=https://s3.amazonaws.com/amcaar/mpi_gene.tar.gz dest=/tmp/mpi_gene.tar.gz
 
     - name: install dependences
       apt: pkg=libblas-dev update_cache=yes cache_valid_time=3600
@@ -11,10 +11,10 @@
     - apt: pkg=libblacs-mpi-dev update_cache=yes cache_valid_time=3600
 
     - name: decompress the application
-      command: tar xvf mpi_gene.tar.gz chdir=/home/user1
+      command: tar xvf mpi_gene.tar.gz chdir=/tmp/
 
     - name: give execution permissions to the launcher script
-      command: chmod u+x launch.sh chdir=/home/user1/mpi_gene
+      command: chmod u+x launch.sh chdir=/tmp/mpi_gene
 
     - name: generate parameters file
-      command: ./generate_parameters.sh 16 0.1 chdir=/home/user1/mpi_gene
+      command: ./generate_parameters.sh 16 0.1 chdir=/tmp/mpi_gene
