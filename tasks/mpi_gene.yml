@@ -14,7 +14,7 @@
       command: tar xvf mpi_gene.tar.gz chdir=/tmp/
 
     - name: give execution permissions to the launcher script
-      command: chmod u+x launch.sh chdir=/tmp/mpi_gene	
+      command: chmod u+x launch.sh chdir=/tmp/mpi_gene
 
     - name: generate parameters file
       command: ./generate_parameters.sh 16 0.1 chdir=/tmp/mpi_gene
