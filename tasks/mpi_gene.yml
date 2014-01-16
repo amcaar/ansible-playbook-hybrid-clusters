@@ -1,0 +1,20 @@
+    - name: download the application
+      get_url: url=https://s3.amazonaws.com/amcaar/mpi_gene.tar.gz dest=/tmp/mpi_gene.tar.gz
+
+    - name: install dependences
+      apt: pkg=libblas-dev update_cache=yes cache_valid_time=3600
+    - apt: pkg=liblapack-dev update_cache=yes cache_valid_time=3600
+    - apt: pkg=libscalapack-mpi-dev update_cache=yes cache_valid_time=3600
+    - apt: pkg=libopenmpi-dev update_cache=yes cache_valid_time=3600
+    - apt: pkg=gfortran update_cache=yes cache_valid_time=3600
+    - apt: pkg=libfftw3-dev update_cache=yes cache_valid_time=3600
+    - apt: pkg=libblacs-mpi-dev update_cache=yes cache_valid_time=3600
+
+    - name: decompress the application
+      command: tar xvf mpi_gene.tar.gz chdir=/tmp/
+
+    - name: give execution permissions to the launcher script
+      command: chmod u+x launch.sh chdir=/tmp/mpi_gene	
+
+    - name: generate parameters file
+      command: ./generate_parameters.sh 16 0.1 chdir=/tmp/mpi_gene
