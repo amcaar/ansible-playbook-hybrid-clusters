@@ -1,0 +1,8 @@
+    - name: install dependences
+      apt: pkg=libblas-dev update_cache=yes cache_valid_time=3600
+    - apt: pkg=liblapack-dev update_cache=yes cache_valid_time=3600
+    - apt: pkg=libscalapack-mpi-dev update_cache=yes cache_valid_time=3600
+    - apt: pkg=libopenmpi-dev update_cache=yes cache_valid_time=3600
+    - apt: pkg=gfortran update_cache=yes cache_valid_time=3600
+    - apt: pkg=libfftw3-dev update_cache=yes cache_valid_time=3600
+    - apt: pkg=libblacs-mpi-dev update_cache=yes cache_valid_time=3600
