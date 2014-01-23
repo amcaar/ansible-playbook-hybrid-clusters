@@ -8,7 +8,7 @@
       command: chmod u+x launch.sh chdir=/home/user1/mpi_gene
 
     - name: generate parameters file
-      command: ./generate_parameters.sh 16 0.1 100 chdir=/home/user1/mpi_gene
+      command: ./generate_parameters.sh 16 0.1 1000 chdir=/home/user1/mpi_gene
 
     - name: change the owner of the application
       command: chown -R user1:user1 /home/user1/mpi_gene
