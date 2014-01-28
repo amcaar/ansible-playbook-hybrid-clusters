@@ -95,7 +95,7 @@
       ignore_errors: yes
 
     - name: start maui daemon
-      shell: /usr/local/maui/sbin/maui
+      shell: sudo /usr/local/maui/sbin/maui
 
     - name: create user1 and configure SSH files
       user: name=user1 password=O3Je2Qxgx0w generate_ssh_key=yes shell=/bin/bash
