@@ -1,0 +1,119 @@
+    - name: change hostname
+      shell: hostname ${IM_MASTER_FQDN}-vpn
+
+    - name: install torque 4.2.5
+      command: wget https://s3.amazonaws.com/amcaar/torque-4.2.5.tar.gz chdir=/home/ubuntu/ creates=/home/ubuntu/torque-4.2.5
+
+    - name: decompress torque package
+      command: tar xzvf torque-4.2.5.tar.gz chdir=/home/ubuntu/ creates=/home/ubuntu/torque-4.2.5
+
+    - name: update repositories cache and install torque dependencies
+      apt: pkg=g++ update_cache=yes cache_valid_time=3600
+
+    - apt: pkg=libssl-dev update_cache=yes cache_valid_time=3600
+
+    - apt: pkg=libxml2-dev update_cache=yes cache_valid_time=3600
+
+    - apt: pkg=build-essential update_cache=yes cache_valid_time=3600
+
+    - apt: pkg=chkconfig update_cache=yes cache_valid_time=3600
+
+    - name: configure torque
+      command: ./configure --prefix=/usr --disable-privports chdir=/home/ubuntu/torque-4.2.5/ creates=/home/ubuntu/tpackages
+
+    - name: compile (make) torque
+      command: make chdir=/home/ubuntu/torque-4.2.5/ creates=/home/ubuntu/tpackages
+
+    - name: install torque
+      command: make install chdir=/home/ubuntu/torque-4.2.5/ creates=/home/ubuntu/tpackages
+
+    - name: create packages for the worker nodes
+      command: make packages chdir=/home/ubuntu/torque-4.2.5/ creates=/home/ubuntu/tpackages
+
+    - name: convert trqauthd in a service
+      command: cp /home/ubuntu/torque-4.2.5/contrib/init.d/debian.trqauthd /etc/init.d/trqauthd creates=/etc/init.d/trqauthd
+
+    - file: src=/usr/lib/insserv/insserv dest=/sbin/insserv state=link
+
+    - command: chkconfig --add trqauthd
+
+    - shell: echo /usr/local/lib > /etc/ld.so.conf.d/torque.conf
+
+    - command: ldconfig
+
+    - name: convert pbs_server in a service
+      command: cp /home/ubuntu/torque-4.2.5/contrib/init.d/debian.pbs_server /etc/init.d/pbs_server creates=/etc/init.d/pbs_server
+
+    - shell: update-rc.d pbs_server defaults
+
+    - name: convert pbs_mom in a service
+      command: cp /home/ubuntu/torque-4.2.5/contrib/init.d/debian.pbs_mom /etc/init.d/pbs_mom creates=/etc/init.d/pbs_mom
+
+    - shell: update-rc.d pbs_mom defaults
+
+    - name: modify server_name file
+      shell: echo ${IM_MASTER_FQDN}-vpn > /var/spool/torque/server_name
+
+    - name: create nodes file
+      template: src=utils/templates/vpn-hosts.conf dest=/var/spool/torque/server_priv/nodes
+
+    - name: create mom config file
+      shell: echo '$pbsserver' ${IM_MASTER_FQDN}-vpn > /var/spool/torque/mom_priv/config
+
+    - name: create /etc/hosts file
+      template: src=utils/templates/etc-vpn-hosts.conf dest=/etc/hosts
+
+    - name: start the trqauthd daemon
+      service: name=trqauthd state=restarted pattern=/usr/sbin/trqauthd
+
+    - name: setup the torque server
+      shell: ./torque.setup root chdir=/home/ubuntu/torque-4.2.5/ creates=/var/spool/torque/server_priv/serverdb
+
+    - name: start the pbs_server daemon
+      service: name=pbs_server state=restarted pattern=/usr/sbin/pbs_server
+
+    - name: start the pbs_mom daemon
+      service: name=pbs_mom state=restarted pattern=/usr/sbin/pbs_mom
+
+    - name: download maui package form Amazon S3
+      command: wget https://s3.amazonaws.com/amcaar/maui-3.3.1.tar.gz chdir=/home/ubuntu/ creates=/usr/local/maui/maui.cfg
+
+    - name: decompress maui package
+      command: tar -xzvf maui-3.3.1.tar.gz chdir=/home/ubuntu/ creates=/usr/local/maui/maui.cfg
+
+    - name: configure maui
+      command: ./configure --prefix=/usr/local/maui chdir=/home/ubuntu/maui-3.3.1/ creates=/usr/local/maui/maui.cfg
+
+    - name: compile (make) maui
+      command: make chdir=/home/ubuntu/maui-3.3.1/ creates=/usr/local/maui/maui.cfg
+
+    - name: install maui
+      command: make install chdir=/home/ubuntu/maui-3.3.1/ creates=/usr/local/maui/maui.cfg
+
+    - name: kill maui if exists
+      shell: kill $(pgrep maui)
+      ignore_errors: yes
+
+    - name: start maui daemon
+      shell: sudo /usr/local/maui/sbin/maui
+
+    - name: create user1 and configure SSH files
+      user: name=user1 password=O3Je2Qxgx0w generate_ssh_key=yes shell=/bin/bash
+
+    - template: src=utils/templates/ssh_known_hosts.conf dest=/etc/ssh/ssh_known_hosts
+
+    - local_action: shell cp /home/${item}/.ssh/id_rsa.pub /tmp/${item}_authorized_keys creates=/tmp/${item}_authorized_keys
+      with_items:
+      - user1
+
+    - local_action: copy src=/tmp/${item}_authorized_keys dest=/home/${item}/.ssh/authorized_keys owner=${item} group=${item} mode=0644
+      with_items:
+      - user1
+
+    - name: update the authorized_keys file
+      shell: cat * >> /home/user1/.ssh/authorized_keys chdir=/tmp/ssh_keys
+      ignore_errors: yes
+
+    - name: add maui commands to the bash
+      shell: echo 'export PATH=$PATH:/usr/local/maui/bin' >> /etc/profile
+

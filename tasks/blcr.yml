@@ -1,0 +1,6 @@
+    - name: obtain the BLCR code
+      get_url: url=http://crd.lbl.gov/assets/Uploads/FTG/Projects/CheckpointRestart/downloads/blcr-0.8.5.tar.gz dest=/home/ubuntu/blcr-0.8.5.tar.gz
+    - name: decompress BLCR
+      command: tar zxf blcr-0.8.5.tar.gz chdir=/home/ubuntu/ creates=/home/ubuntu/blcr-0.8.5
+    - name: give execution permissions to the launcher script
+      command: chmod u+x launch.sh chdir=/tmp/sim_europar
