@@ -1,5 +1,5 @@
     - name: change hostname
-      shell: hostname ${IM_MASTER_FQDN}-vpn
+      shell: hostname ${IM_MASTER_FQDN}
 
     - name: install torque 4.2.5
       command: wget https://s3.amazonaws.com/amcaar/torque-4.2.5.tar.gz chdir=/home/ubuntu/ creates=/home/ubuntu/torque-4.2.5
@@ -19,7 +19,7 @@
     - apt: pkg=chkconfig update_cache=yes cache_valid_time=3600
 
     - name: configure torque
-      command: ./configure --prefix=/usr --disable-privports chdir=/home/ubuntu/torque-4.2.5/ creates=/home/ubuntu/tpackages
+      command: ./configure --prefix=/usr --disable-privports --enable-unixsockets=no --enable-blcr chdir=/home/ubuntu/torque-4.2.5/ creates=/home/ubuntu/tpackages
 
     - name: compile (make) torque
       command: make chdir=/home/ubuntu/torque-4.2.5/ creates=/home/ubuntu/tpackages
@@ -52,16 +52,21 @@
     - shell: update-rc.d pbs_mom defaults
 
     - name: modify server_name file
-      shell: echo ${IM_MASTER_FQDN}-vpn > /var/spool/torque/server_name
+      shell: echo ${IM_MASTER_FQDN} > /var/spool/torque/server_name
 
     - name: create nodes file
-      template: src=utils/templates/vpn-hosts.conf dest=/var/spool/torque/server_priv/nodes
+      template: src=utils/templates/hosts.conf dest=/var/spool/torque/server_priv/nodes
 
     - name: create mom config file
-      shell: echo '$pbsserver' ${IM_MASTER_FQDN}-vpn > /var/spool/torque/mom_priv/config
+      shell: echo '$pbsserver' ${IM_MASTER_FQDN} > /var/spool/torque/mom_priv/config
+    - shell: echo $checkpoint_script /var/spool/torque/mom_priv/blcr_checkpoint_script
+    - shell: echo $restart_script /var/spool/torque/mom_priv/blcr_restart_script
+    - shell: $checkpoint_run_exe /usr/local/bin/cr_run
+    - shell: $loglevel 7
 
-    - name: create /etc/hosts file
-      template: src=utils/templates/etc-vpn-hosts.conf dest=/etc/hosts
+    - name: download from S3 the BLCR configuration scripts
+      get_url: url=https://s3.amazonaws.com/amcaar/blcr_restart_script dest=/var/spool/torque/mom_priv/blcr_restart_script
+    - get_url: url=https://s3.amazonaws.com/amcaar/blcr_checkpoint_script dest=/var/spool/torque/mom_priv/blcr_checkpoint_script
 
     - name: start the trqauthd daemon
       service: name=trqauthd state=restarted pattern=/usr/sbin/trqauthd
@@ -116,4 +121,6 @@
 
     - name: add maui commands to the bash
       shell: echo 'export PATH=$PATH:/usr/local/maui/bin' >> /etc/profile
+
+
 
