@@ -34,4 +34,8 @@
       ignore_errors: yes
 
     - name: configure evironment variables
-      shell: PREFIX=/usr/local;PATH=$PATH:$PREFIX/bin;MANPATH=$PREFIX/man;LD_LIBRARY_PATH=$PREFIX/lib:$PREFIX/lib64;export PATH MANPATH LD_LIBRARY_PATH chdir=/home/ubuntu
+      shell: echo 'PREFIX=/usr/local' >> /etc/profile chdir=/home/ubuntu
+    - shell: echo 'PATH=$PATH:$PREFIX/bin' >> /etc/profile chdir=/home/ubuntu
+    - shell: echo 'MANPATH=$PREFIX/man' >> /etc/profile chdir=/home/ubuntu
+    - shell: echo 'LD_LIBRARY_PATH=$PREFIX/lib:$PREFIX/lib64' >> /etc/profile chdir=/home/ubuntu
+    - shell: echo 'export PATH MANPATH LD_LIBRARY_PATH' >> /etc/profile chdir=/home/ubuntu
