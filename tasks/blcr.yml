@@ -1,25 +1,35 @@
     - name: obtain the BLCR code
       get_url: url=http://crd.lbl.gov/assets/Uploads/FTG/Projects/CheckpointRestart/downloads/blcr-0.8.5.tar.gz dest=/home/ubuntu/blcr-0.8.5.tar.gz
+
     - name: decompress BLCR
       command: tar zxf blcr-0.8.5.tar.gz chdir=/home/ubuntu/ creates=/home/ubuntu/blcr-0.8.5
+
     - name: create a folder where compile the code of BLCR
       file: path=/home/ubuntu/blcr-0.8.5/builddir state=directory
+
     - name: install all dependences of BLCR
       apt: pkg=make update_cache=yes cache_valid_time=3600
     - apt: pkg=gcc update_cache=yes cache_valid_time=3600
     - apt: pkg=linux-headers-3.2.0-23-virtual update_cache=yes cache_valid_time=3600
+
     - name: obtain the System.map file from S3
       get_url: url=https://s3.amazonaws.com/amcaar/System.map-3.2.0-23-virtual dest=/tmp/System.map-3.2.0-23-virtual
+
     - name: configure blcr
       shell: ../configure --with-system-map=/tmp/System.map-3.2.0-23-virtual chdir=/home/ubuntu/blcr-0.8.5/builddir creates=?
+
     - name: compile (make) BLCR
       command: make chdir=/home/ubuntu/blcr-0.8.5/builddir creates=?
+
     - name: check the compilation of BLCR
       command: make insmod check chdir=/home/ubuntu/blcr-0.8.5/builddir creates=?
+
     - name: install BLCR
       command: make install chdir=/home/ubuntu/blcr-0.8.5/builddir creates=?
+
     - name: load kernel modules
       command: /sbin/insmod /usr/local/lib/blcr/3.2.0-23-virtual/blcr_imports.ko
     - command: /sbin/insmod /usr/local/lib/blcr/3.2.0-23-virtual/blcr.ko
+
     - name: configure evironment variables
       
