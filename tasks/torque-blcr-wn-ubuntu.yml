@@ -10,6 +10,10 @@
     - name: copy config mom file from the frontend
       copy: src=/var/spool/torque/mom_priv/config dest=/var/spool/torque/mom_priv/config mode=0644 owner=root group=root
 
+    - name: download from S3 the BLCR configuration scripts
+      get_url: url=https://s3.amazonaws.com/amcaar/blcr_restart_script dest=/var/spool/torque/mom_priv/blcr_restart_script
+    - get_url: url=https://s3.amazonaws.com/amcaar/blcr_checkpoint_script dest=/var/spool/torque/mom_priv/blcr_checkpoint_script
+
     - name: copy hosts file from the frontend
       copy: src=/etc/hosts dest=/etc/hosts
 
