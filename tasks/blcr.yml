@@ -34,9 +34,4 @@
       ignore_errors: yes
 
     - name: configure evironment variables
-      shell: echo PREFIX=/usr/local >> /home/ubuntu/.bashrc
-    - shell: echo PATH=$PATH:$PREFIX/bin >> /home/ubuntu/.bashrc
-    - shell: echo MANPATH=$PREFIX/man >> /home/ubuntu/.bashrc
-    - shell: echo LD_LIBRARY_PATH=$PREFIX/lib:$PREFIX/lib64 >> /home/ubuntu/.bashrc
-    - shell: . .bashrc
-      
+      shell: PREFIX=/usr/local;PATH=$PATH:$PREFIX/bin;MANPATH=$PREFIX/man;LD_LIBRARY_PATH=$PREFIX/lib:$PREFIX/lib64;export PATH MANPATH LD_LIBRARY_PATH chdir=/home/ubuntu
