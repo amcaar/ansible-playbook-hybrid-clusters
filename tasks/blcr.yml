@@ -22,14 +22,21 @@
       command: make chdir=/home/ubuntu/blcr-0.8.5/builddir creates=/home/ubuntu/blcr-0.8.5/builddir/bin
 
     - name: check the compilation of BLCR
-      command: make insmod check chdir=/home/ubuntu/blcr-0.8.5/builddir creates=?
+      shell: make insmod check > test.log chdir=/home/ubuntu/blcr-0.8.5/builddir creates=/home/ubuntu/blcr-0.8.5/builddir/test.log
 
     - name: install BLCR
-      command: make install chdir=/home/ubuntu/blcr-0.8.5/builddir creates=?
+      command: make install chdir=/home/ubuntu/blcr-0.8.5/builddir creates=/usr/local/lib/blcr/3.2.0-23-virtual/blcr.ko
 
     - name: load kernel modules
       command: /sbin/insmod /usr/local/lib/blcr/3.2.0-23-virtual/blcr_imports.ko
+      ignore_errors: yes
     - command: /sbin/insmod /usr/local/lib/blcr/3.2.0-23-virtual/blcr.ko
+      ignore_errors: yes
 
     - name: configure evironment variables
+      shell: echo PREFIX=/usr/local >> /home/ubuntu/.bashrc
+    - shell: echo PATH=$PATH:$PREFIX/bin >> /home/ubuntu/.bashrc
+    - shell: echo MANPATH=$PREFIX/man >> /home/ubuntu/.bashrc
+    - shell: echo LD_LIBRARY_PATH=$PREFIX/lib:$PREFIX/lib64 >> /home/ubuntu/.bashrc
+    - shell: . .bashrc
       
