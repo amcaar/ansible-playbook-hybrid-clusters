@@ -16,10 +16,10 @@
       get_url: url=https://s3.amazonaws.com/amcaar/System.map-3.2.0-23-virtual dest=/tmp/System.map-3.2.0-23-virtual
 
     - name: configure blcr
-      shell: ../configure --with-system-map=/tmp/System.map-3.2.0-23-virtual chdir=/home/ubuntu/blcr-0.8.5/builddir creates=?
+      shell: ../configure --with-system-map=/tmp/System.map-3.2.0-23-virtual chdir=/home/ubuntu/blcr-0.8.5/builddir creates=/home/ubuntu/blcr-0.8.5/builddir/config.log
 
     - name: compile (make) BLCR
-      command: make chdir=/home/ubuntu/blcr-0.8.5/builddir creates=?
+      command: make chdir=/home/ubuntu/blcr-0.8.5/builddir creates=/home/ubuntu/blcr-0.8.5/builddir/bin
 
     - name: check the compilation of BLCR
       command: make insmod check chdir=/home/ubuntu/blcr-0.8.5/builddir creates=?
