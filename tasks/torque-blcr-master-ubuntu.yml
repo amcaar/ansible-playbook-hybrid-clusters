@@ -59,10 +59,10 @@
 
     - name: create mom config file
       shell: echo '$pbsserver' ${IM_MASTER_FQDN} > /var/spool/torque/mom_priv/config
-    - shell: echo $checkpoint_script /var/spool/torque/mom_priv/blcr_checkpoint_script > /var/spool/torque/mom_priv/config
-    - shell: echo $restart_script /var/spool/torque/mom_priv/blcr_restart_script > /var/spool/torque/mom_priv/config
-    - shell: echo $checkpoint_run_exe /usr/local/bin/cr_run > /var/spool/torque/mom_priv/config
-    - shell: echo $loglevel 7 > /var/spool/torque/mom_priv/config
+    - shell: echo '$checkpoint_script /var/spool/torque/mom_priv/blcr_checkpoint_script' >> /var/spool/torque/mom_priv/config
+    - shell: echo '$restart_script /var/spool/torque/mom_priv/blcr_restart_script' >> /var/spool/torque/mom_priv/config
+    - shell: echo '$checkpoint_run_exe /usr/local/bin/cr_run' >> /var/spool/torque/mom_priv/config
+    - shell: echo '$loglevel 7' >> /var/spool/torque/mom_priv/config
 
     - name: download from S3 the BLCR configuration scripts
       get_url: url=https://s3.amazonaws.com/amcaar/blcr_restart_script dest=/var/spool/torque/mom_priv/blcr_restart_script
