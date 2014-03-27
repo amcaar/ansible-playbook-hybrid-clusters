@@ -65,8 +65,8 @@
     - shell: echo '$loglevel 7' >> /var/spool/torque/mom_priv/config
 
     - name: download from S3 the BLCR configuration scripts
-      get_url: url=https://s3.amazonaws.com/amcaar/blcr_restart_script dest=/var/spool/torque/mom_priv/blcr_restart_script
-    - get_url: url=https://s3.amazonaws.com/amcaar/blcr_checkpoint_script dest=/var/spool/torque/mom_priv/blcr_checkpoint_script
+      get_url: url=https://s3.amazonaws.com/amcaar/blcr_restart_script dest=/var/spool/torque/mom_priv/blcr_restart_script mode=0754
+    - get_url: url=https://s3.amazonaws.com/amcaar/blcr_checkpoint_script dest=/var/spool/torque/mom_priv/blcr_checkpoint_script mode=0754
 
     - name: start the trqauthd daemon
       service: name=trqauthd state=restarted pattern=/usr/sbin/trqauthd
