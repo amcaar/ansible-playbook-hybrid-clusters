@@ -33,6 +33,9 @@
     - command: /sbin/insmod /usr/local/lib/blcr/3.2.0-23-virtual/blcr.ko
       ignore_errors: yes
 
+    - name: updating ld.so.cache
+      command: ldconfig
+
     - name: configure evironment variables
       shell: echo 'PREFIX=/usr/local' >> /etc/profile chdir=/home/ubuntu
     - shell: echo 'PATH=$PATH:$PREFIX/bin' >> /etc/profile chdir=/home/ubuntu
