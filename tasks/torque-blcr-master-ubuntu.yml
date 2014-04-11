@@ -19,7 +19,7 @@
     - apt: pkg=chkconfig update_cache=yes cache_valid_time=3600
 
     - name: configure torque
-      command: ./configure --prefix=/usr --enable-unixsockets=no --enable-blcr chdir=/home/ubuntu/torque-4.2.5/ creates=/home/ubuntu/tpackages
+      command: ./configure --prefix=/usr --disable-privports --enable-unixsockets=no --enable-blcr chdir=/home/ubuntu/torque-4.2.5/ creates=/home/ubuntu/tpackages
 
     - name: compile (make) torque
       command: make chdir=/home/ubuntu/torque-4.2.5/ creates=/home/ubuntu/tpackages
