@@ -76,16 +76,16 @@
       service: name=pbs_mom state=restarted pattern=/usr/sbin/pbs_mom
 
     - name: download maui package form Amazon S3
-      command: wget https://s3.amazonaws.com/amcaar/maui-3.3.1.tar.gz chdir=/home/ubuntu/ creates=/usr/local/maui/maui.cfg
+      get_url: url=https://s3.amazonaws.com/amcaar/maui-3.3.1.tar.gz dest=/home/ubuntu/
 
     - name: decompress maui package
-      command: tar -xzvf maui-3.3.1.tar.gz chdir=/home/ubuntu/ creates=/usr/local/maui/maui.cfg
+      command: tar -xzvf maui-3.3.1.tar.gz chdir=/home/ubuntu/ creates=/home/ubuntu/maui-3.3.1
 
     - name: configure maui
-      command: ./configure --prefix=/usr/local/maui chdir=/home/ubuntu/maui-3.3.1/ creates=/usr/local/maui/maui.cfg
+      command: ./configure --prefix=/usr/local/maui chdir=/home/ubuntu/maui-3.3.1/ creates=/home/ubuntu/maui-3.3.1/Makefile
 
     - name: compile (make) maui
-      command: make chdir=/home/ubuntu/maui-3.3.1/ creates=/usr/local/maui/maui.cfg
+      command: make chdir=/home/ubuntu/maui-3.3.1/ creates=/home/ubuntu/maui-3.3.1/bin/maui
 
     - name: install maui
       command: make install chdir=/home/ubuntu/maui-3.3.1/ creates=/usr/local/maui/maui.cfg
