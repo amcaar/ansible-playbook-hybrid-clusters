@@ -1,0 +1,35 @@
+    - name: update repositories cache and install slurm and its dependences
+      apt: pkg=libmunge2 update_cache=yes cache_valid_time=3600
+    - apt: pkg=libpq5 update_cache=yes cache_valid_time=3600
+    - apt: pkg=openssl-blacklist update_cache=yes cache_valid_time=3600
+    - apt: pkg=munge update_cache=yes cache_valid_time=3600
+    - apt: pkg=slurm-llnl-basic-plugins update_cache=yes cache_valid_time=3600
+    - apt: pkg=slurm-llnl update_cache=yes cache_valid_time=3600
+
+    - name: generate munge key
+      shell: dd if=/dev/urandom bs=1 count=1024 > /etc/munge/munge.key creates=/etc/munge/munge.key
+
+    - name: copy the munge.key to a temp directory
+      command: cp /etc/munge/munge.key /tmp/ creates=/tmp/munge.key
+
+    - name: change the owner of munge key
+      command: chown munge:munge munge.key chdir=/etc/munge/
+
+    - name: change the permissions of munge key
+      command: chmod 400 munge.key chdir=/etc/munge/
+
+    - name: start munge daemon
+      command: /etc/init.d/munge start
+      ignore_errors: yes
+
+    - name: download from S3 the BLCR configuration scripts
+      get_url: url=https://s3.amazonaws.com/amcaar/slurm.conf dest=/etc/slurm-llnl/slurm.conf
+
+    - name: create slurm user
+      shell: echo "slurm:x:2000:2000:slurm admin:/home/slurm:/bin/bash" >> /etc/passwd
+    - shell: echo "slurm:x:2000:slurm" >> /etc/group
+    - command: pwconv
+
+    - name: start slurmctld daemon
+      command: /etc/init.d/slurm-llnl start
+      ignore_errors: yes

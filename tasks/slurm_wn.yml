@@ -1,0 +1,32 @@
+    - name: update repositories cache and install slurm and its dependences
+      apt: pkg=libmunge2 update_cache=yes cache_valid_time=3600
+    - apt: pkg=libpq5 update_cache=yes cache_valid_time=3600
+    - apt: pkg=openssl-blacklist update_cache=yes cache_valid_time=3600
+    - apt: pkg=munge update_cache=yes cache_valid_time=3600
+    - apt: pkg=slurm-llnl-basic-plugins update_cache=yes cache_valid_time=3600
+    - apt: pkg=slurm-llnl update_cache=yes cache_valid_time=3600
+
+    - name: copy munge.key file from the frontend
+      copy: src=/tmp/munge.key dest=/etc/munge/munge.key
+
+    - name: change the owner of munge key
+      command: chown munge:munge munge.key chdir=/etc/munge/
+
+    - name: change the permissions of munge key
+      command: chmod 400 munge.key chdir=/etc/munge/
+
+    - name: start munge daemon
+      command: /etc/init.d/munge start
+      ignore_errors: yes
+
+    - name: copy slurm.conf file from the frontend
+      copy: src=/etc/slurm-llnl/slurm.conf dest=/etc/slurm-llnl/slurm.conf
+
+    - name: create slurm user
+      shell: echo "slurm:x:2000:2000:slurm admin:/home/slurm:/bin/bash" >> /etc/passwd
+    - shell: echo "slurm:x:2000:slurm" >> /etc/group
+    - command: pwconv
+
+    - name: start slurmd daemon
+      command: slurmd
+      ignore_errors: yes
