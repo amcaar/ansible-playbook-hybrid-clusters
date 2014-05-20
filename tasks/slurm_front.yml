@@ -4,7 +4,21 @@
     - apt: pkg=openssl-blacklist update_cache=yes cache_valid_time=3600
     - apt: pkg=munge update_cache=yes cache_valid_time=3600
     - apt: pkg=slurm-llnl-basic-plugins update_cache=yes cache_valid_time=3600
-    - apt: pkg=slurm-llnl update_cache=yes cache_valid_time=3600
+
+    - name: download SLURM package
+      get_url: url=https://s3.amazonaws.com/amcaar/slurm-14.03.3-2.tar.bz2 dest=/home/ubuntu/slurm-14.03.3-2.tar.bz2
+
+    - name: decompress torque package
+      command: tar --bzip -x -f slurm*tar.bz2 chdir=/home/ubuntu/ creates=/home/ubuntu/slurm-14.03.3-2
+
+    - name: configure SLURM
+      command: ./configure --with-blcr=/usr/local/bin/ chdir=/home/ubuntu/slurm-14.03.3-2 creates=/home/ubuntu/slurm-14.03.3-2/src
+
+    - name: compile (make) SLURM
+      command: make chdir=/home/ubuntu/slurm-14.03.3-2 creates=/home/ubuntu/slurm-14.03.3-2/src/slurmctld
+
+    - name: install SLURM
+      command: make install chdir=/home/ubuntu/slurm-14.03.3-2 creates=/usr/local/bin/srun
 
     - name: generate munge key
       shell: dd if=/dev/urandom bs=1 count=1024 > /etc/munge/munge.key creates=/etc/munge/munge.key
@@ -22,7 +36,7 @@
       command: /etc/init.d/munge start
       ignore_errors: yes
 
-    - name: download from S3 the BLCR configuration scripts
+    - name: download from S3 the slurm.conf file
       get_url: url=https://s3.amazonaws.com/amcaar/slurm.conf dest=/etc/slurm-llnl/slurm.conf
 
     - name: create slurm user
@@ -30,6 +44,12 @@
     - shell: echo "slurm:x:2000:slurm" >> /etc/group
     - command: pwconv
 
+    - name: create folders used by SLURM and set slurm owner
+      command: mkdir /var/spool/slurm
+    - command: chown -R slurm:slurm /var/spool/slurm
+    - command: mkdir /var/log/slurm
+    - command: chown -R slurm:slurm /var/log/slurm
+
     - name: start slurmctld daemon
-      command: /etc/init.d/slurm-llnl start
+      command: slurmctld
       ignore_errors: yes
