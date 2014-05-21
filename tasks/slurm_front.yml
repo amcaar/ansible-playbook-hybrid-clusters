@@ -12,7 +12,7 @@
       command: tar --bzip -x -f slurm-14.03.3-2.tar.bz2 chdir=/home/ubuntu/ creates=/home/ubuntu/slurm-14.03.3-2
 
     - name: configure SLURM
-      command: ./configure --with-blcr=/usr/local/bin/ chdir=/home/ubuntu/slurm-14.03.3-2 creates=/home/ubuntu/slurm-14.03.3-2/src
+      command: ./configure --with-blcr=/usr/local/bin/ chdir=/home/ubuntu/slurm-14.03.3-2
 
     - name: compile (make) SLURM
       command: make chdir=/home/ubuntu/slurm-14.03.3-2 creates=/home/ubuntu/slurm-14.03.3-2/src/slurmctld
