@@ -3,7 +3,6 @@
     - apt: pkg=libpq5 update_cache=yes cache_valid_time=3600
     - apt: pkg=openssl-blacklist update_cache=yes cache_valid_time=3600
     - apt: pkg=munge update_cache=yes cache_valid_time=3600
-    - apt: pkg=slurm-llnl-basic-plugins update_cache=yes cache_valid_time=3600
 
     - name: download SLURM package
       get_url: url=https://s3.amazonaws.com/amcaar/slurm-14.03.3-2.tar.bz2 dest=/home/ubuntu/slurm-14.03.3-2.tar.bz2
@@ -12,7 +11,7 @@
       command: tar --bzip -x -f slurm-14.03.3-2.tar.bz2 chdir=/home/ubuntu/ creates=/home/ubuntu/slurm-14.03.3-2
 
     - name: configure SLURM
-      command: ./configure --with-blcr=/usr/local/bin/ chdir=/home/ubuntu/slurm-14.03.3-2 creates=/home/ubuntu/slurm-14.03.3-2/src
+      command: ./configure --with-blcr=/usr/local/bin/ chdir=/home/ubuntu/slurm-14.03.3-2
 
     - name: compile (make) SLURM
       command: make chdir=/home/ubuntu/slurm-14.03.3-2 creates=/home/ubuntu/slurm-14.03.3-2/src/slurmctld
@@ -34,7 +33,7 @@
       ignore_errors: yes
 
     - name: copy slurm.conf file from the frontend
-      copy: src=/etc/slurm-llnl/slurm.conf dest=/etc/slurm-llnl/slurm.conf
+      copy: src=/usr/local/etc/slurm.conf dest=/usr/local/etc/slurm.conf
 
     - name: create slurm user
       shell: echo "slurm:x:2000:2000:slurm admin:/home/slurm:/bin/bash" >> /etc/passwd
