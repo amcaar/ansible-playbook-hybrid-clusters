@@ -6,19 +6,19 @@
     - apt: pkg=slurm-llnl-basic-plugins update_cache=yes cache_valid_time=3600
 
     - name: download SLURM package
-      get_url: url=https://s3.amazonaws.com/amcaar/slurm-14.03.3-2.tar.bz2 dest=/home/ubuntu/slurm-14.03.3-2.tar.bz2
+      get_url: url=https://s3.amazonaws.com/amcaar/slurm-2.3.5.tar.bz2 dest=/home/ubuntu/slurm-2.3.5.tar.bz2
 
     - name: decompress SLURM package
-      command: tar --bzip -x -f slurm-14.03.3-2.tar.bz2 chdir=/home/ubuntu/ creates=/home/ubuntu/slurm-14.03.3-2
+      command: tar --bzip -x -f slurm-2.3.5.tar.bz2 chdir=/home/ubuntu/ creates=/home/ubuntu/slurm-2.3.5
 
     - name: configure SLURM
-      command: ./configure --with-blcr=/usr/local/bin/ chdir=/home/ubuntu/slurm-14.03.3-2
+      command: ./configure --with-blcr=/usr/local/bin/ chdir=/home/ubuntu/slurm-2.3.5 creates=/home/ubuntu/slurm-2.3.5/config.log
 
     - name: compile (make) SLURM
-      command: make chdir=/home/ubuntu/slurm-14.03.3-2 creates=/home/ubuntu/slurm-14.03.3-2/src/slurmctld
+      command: make chdir=/home/ubuntu/slurm-2.3.5 creates=/home/ubuntu/slurm-2.3.5/src/slurmctld
 
     - name: install SLURM
-      command: make install chdir=/home/ubuntu/slurm-14.03.3-2 creates=/usr/local/bin/srun
+      command: make install chdir=/home/ubuntu/slurm-2.3.5 creates=/usr/local/bin/srun
 
     - name: generate munge key
       shell: dd if=/dev/urandom bs=1 count=1024 > /etc/munge/munge.key creates=/etc/munge/munge.key
@@ -45,9 +45,9 @@
     - command: pwconv
 
     - name: create folders used by SLURM and set slurm owner
-      command: mkdir /var/spool/slurm
+      file: path=/var/spool/slurm state=directory
     - command: chown -R slurm:slurm /var/spool/slurm
-    - command: mkdir /var/log/slurm
+    - file: path=/var/log/slurm state=directory
     - command: chown -R slurm:slurm /var/log/slurm
 
     - name: start slurmctld daemon
