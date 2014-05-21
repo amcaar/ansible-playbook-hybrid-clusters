@@ -3,6 +3,7 @@
     - apt: pkg=libpq5 update_cache=yes cache_valid_time=3600
     - apt: pkg=openssl-blacklist update_cache=yes cache_valid_time=3600
     - apt: pkg=munge update_cache=yes cache_valid_time=3600
+    - apt: pkg=slurm-llnl-basic-plugins update_cache=yes cache_valid_time=3600
 
     - name: download SLURM package
       get_url: url=https://s3.amazonaws.com/amcaar/slurm-14.03.3-2.tar.bz2 dest=/home/ubuntu/slurm-14.03.3-2.tar.bz2
