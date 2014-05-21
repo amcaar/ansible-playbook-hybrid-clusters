@@ -9,7 +9,7 @@
       get_url: url=https://s3.amazonaws.com/amcaar/slurm-14.03.3-2.tar.bz2 dest=/home/ubuntu/slurm-14.03.3-2.tar.bz2
 
     - name: decompress torque package
-      command: tar --bzip -x -f slurm*tar.bz2 chdir=/home/ubuntu/ creates=/home/ubuntu/slurm-14.03.3-2
+      command: tar --bzip -x -f slurm-14.03.3-2.tar.bz2 chdir=/home/ubuntu/ creates=/home/ubuntu/slurm-14.03.3-2
 
     - name: configure SLURM
       command: ./configure --with-blcr=/usr/local/bin/ chdir=/home/ubuntu/slurm-14.03.3-2 creates=/home/ubuntu/slurm-14.03.3-2/src
