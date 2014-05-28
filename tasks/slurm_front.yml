@@ -50,6 +50,8 @@
     - command: chown -R slurm:slurm /var/spool/slurm
     - file: path=/var/log/slurm state=directory
     - command: chown -R slurm:slurm /var/log/slurm
+    - file: path=/var/slurm/checkpoint state=directory
+    - command: chown -R slurm:slurm /var/slurm/checkpoint
 
     - name: start slurmctld daemon
       command: slurmctld
