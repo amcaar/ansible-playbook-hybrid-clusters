@@ -53,4 +53,3 @@
 
     - name: start slurmctld daemon
       command: slurmctld
-      ignore_errors: yes
