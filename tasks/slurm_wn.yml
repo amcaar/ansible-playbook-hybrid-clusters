@@ -50,4 +50,3 @@
 
     - name: start slurmd daemon
       command: slurmd
-      ignore_errors: yes
