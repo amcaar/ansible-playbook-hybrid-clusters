@@ -31,7 +31,7 @@
     - name: create user1 and configure SSH access
       user: name=user1 password=O3Je2Qxgx0w generate_ssh_key=yes shell=/bin/bash
 
-    - copy: src=/tmp/${item}_authorized_keys dest=/home/${item}/.ssh/authorized_keys owner=${item} group=${item} mode=0644
+    - copy: src=/tmp/{{item}}_authorized_keys dest=/home/{{item}}/.ssh/authorized_keys owner={{item}} group={{item}} mode=0644
       with_items:
       - user1
 
