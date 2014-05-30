@@ -1,5 +1,5 @@
     - name: change hostname
-      shell: hostname ${IM_MASTER_FQDN}-vpn
+      shell: hostname {{IM_MASTER_FQDN}}-vpn
 
     - name: update repositories cache and install openvpn package
       apt: pkg=openvpn update_cache=yes cache_valid_time=3600
@@ -83,7 +83,7 @@
       lineinfile: dest=/etc/openvpn/server.conf regexp=';group nogroup' line='group nogroup' state=present
   
     - name: modify remote line of client.conf
-      lineinfile: dest=/etc/openvpn/client.conf regexp='remote my-server-1 1194' line="remote ${IM_MASTER_FQDN} 1194" state=present
+      lineinfile: dest=/etc/openvpn/client.conf regexp='remote my-server-1 1194' line="remote {{IM_MASTER_FQDN}} 1194" state=present
 
     - name: deactivate resolv-retry infinite in client.conf
       lineinfile: dest=/etc/openvpn/client.conf regexp='resolv-retry infinite' line=';resolv-retry infinite' state=present
