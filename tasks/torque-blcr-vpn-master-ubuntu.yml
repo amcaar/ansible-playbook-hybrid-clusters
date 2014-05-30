@@ -1,5 +1,5 @@
     - name: change hostname
-      shell: hostname ${IM_MASTER_FQDN}-vpn
+      shell: hostname {{IM_MASTER_FQDN}}-vpn
 
     - name: install torque 4.2.5
       command: wget https://s3.amazonaws.com/amcaar/torque-4.2.5.tar.gz chdir=/home/ubuntu/ creates=/home/ubuntu/torque-4.2.5
@@ -52,13 +52,13 @@
     - shell: update-rc.d pbs_mom defaults
 
     - name: modify server_name file
-      shell: echo ${IM_MASTER_FQDN}-vpn > /var/spool/torque/server_name
+      shell: echo {{IM_MASTER_FQDN}}-vpn > /var/spool/torque/server_name
 
     - name: create nodes file
       template: src=utils/templates/vpn-hosts.conf dest=/var/spool/torque/server_priv/nodes
 
     - name: create mom config file
-      shell: echo '$pbsserver' ${IM_MASTER_FQDN}-vpn > /var/spool/torque/mom_priv/config
+      shell: echo '$pbsserver' {{IM_MASTER_FQDN}}-vpn > /var/spool/torque/mom_priv/config
     - shell: echo '$checkpoint_script /var/spool/torque/mom_priv/blcr_checkpoint_script' >> /var/spool/torque/mom_priv/config
     - shell: echo '$restart_script /var/spool/torque/mom_priv/blcr_restart_script' >> /var/spool/torque/mom_priv/config
     - shell: echo '$checkpoint_run_exe /usr/local/bin/cr_run' >> /var/spool/torque/mom_priv/config
@@ -110,11 +110,11 @@
 
     - template: src=utils/templates/ssh_known_hosts.conf dest=/etc/ssh/ssh_known_hosts
 
-    - local_action: shell cp /home/${item}/.ssh/id_rsa.pub /tmp/${item}_authorized_keys creates=/tmp/${item}_authorized_keys
+    - local_action: shell cp /home/{{item}}/.ssh/id_rsa.pub /tmp/{{item}}_authorized_keys creates=/tmp/{{item}}_authorized_keys
       with_items:
       - user1
 
-    - local_action: copy src=/tmp/${item}_authorized_keys dest=/home/${item}/.ssh/authorized_keys owner=${item} group=${item} mode=0644
+    - local_action: copy src=/tmp/{{item}}_authorized_keys dest=/home/{{item}}/.ssh/authorized_keys owner={{item}} group={{item}} mode=0644
       with_items:
       - user1
 
