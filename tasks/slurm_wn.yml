@@ -5,6 +5,7 @@
     - apt: pkg=munge update_cache=yes cache_valid_time=3600
     - apt: pkg=slurm-llnl-basic-plugins update_cache=yes cache_valid_time=3600
     - apt: pkg=libmunge-dev update_cache=yes cache_valid_time=3600
+    - apt: pkg=gcc update_cache=yes cache_valid_time=3600
 
     - name: download SLURM package
       get_url: url=https://s3.amazonaws.com/amcaar/slurm-2.3.5.tar.bz2 dest=/home/ubuntu/slurm-2.3.5.tar.bz2
