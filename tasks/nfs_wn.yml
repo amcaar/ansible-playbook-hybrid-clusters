@@ -2,5 +2,5 @@
       apt: pkg=nfs-common update_cache=yes cache_valid_time=3600
 
     - name: mount the shared directories
-      command: mount -t nfs 10.0.0.15:/home home 
+      command: mount -t nfs 10.0.0.21:/home home 
       #command: mount -t nfs {{IM_NODE_ANSIBLE_IP}}:/home home 
