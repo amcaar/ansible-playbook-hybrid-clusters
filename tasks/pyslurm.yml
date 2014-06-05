@@ -7,7 +7,7 @@
       git: repo=git://github.com/gingergeeks/pyslurm dest=/home/ubuntu/pyslurm
 
     - name: build pyslurm
-      command: python setup.py build chdir=/home/ubuntu/pyslurm creates=/home/ubuntu/pyslurm/pyslurm/pyslurm.c
+      command: python setup.py build --slurm=/usr/local chdir=/home/ubuntu/pyslurm creates=/home/ubuntu/pyslurm/pyslurm/pyslurm.c
 
     - name: install pyslurm
       command: python setup.py install chdir=/home/ubuntu/pyslurm creates=/usr/local/lib/python2.7/dist-packages/pyslurm
