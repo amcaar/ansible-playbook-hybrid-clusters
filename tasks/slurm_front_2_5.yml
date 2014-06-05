@@ -18,7 +18,8 @@
       command: ./configure --with-blcr=/usr/local/bin/ chdir=/home/ubuntu/slurm-2.5.7 creates=/home/ubuntu/slurm-2.5.7/config.log
 
     - name: comment "Unsupported option" line in select_linear.c
-      lineinfile: dest=/home/ubuntu/slurm-2.5.7/src/plugins/select/linear/select_linear.c regexp='                error("Unsupported option %d for get_nodeinfo.", dinfo);' line='//error("Unsupported option %d for get_nodeinfo.", dinfo);' state=present
+      lineinfile: dest=/home/ubuntu/slurm-2.5.7/src/plugins/select/linear/select_linear.c regexp="*Unsupported*" line='//error("Unsupported option %d for get_nodeinfo.", dinfo);' state=present
+#      lineinfile: dest=/home/ubuntu/slurm-2.5.7/src/plugins/select/linear/select_linear.c regexp='                error("Unsupported option %d for get_nodeinfo.", dinfo);' line='//error("Unsupported option %d for get_nodeinfo.", dinfo);' state=present
 
     - name: compile (make) SLURM
       command: make chdir=/home/ubuntu/slurm-2.5.7 creates=/home/ubuntu/slurm-2.5.7/src/slurmctld
