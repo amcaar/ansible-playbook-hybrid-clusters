@@ -5,6 +5,7 @@
     - apt: pkg=munge update_cache=yes cache_valid_time=3600
     - apt: pkg=slurm-llnl-basic-plugins update_cache=yes cache_valid_time=3600
     - apt: pkg=libmunge-dev update_cache=yes cache_valid_time=3600
+# Si no instalase antes la receta del BLCR, necesitaria instalar en esta gcc y make
 #    - apt: pkg=gcc update_cache=yes cache_valid_time=3600
 
     - name: download SLURM package
